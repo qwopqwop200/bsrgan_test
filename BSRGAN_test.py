@@ -7,11 +7,21 @@ import cv2
 import re
 import argparse
 
+def str2bool(v):
+    if isinstance(v, bool):
+        return v
+    if v.lower() in ('yes', 'true', 't', 'y', '1'):
+        return True
+    elif v.lower() in ('no', 'false', 'f', 'n', '0'):
+        return False
+    else:
+        raise argparse.ArgumentTypeError('Boolean value expected.')
+
 parser = argparse.ArgumentParser()
 parser.add_argument('--image_path', type=str,required=True,help = 'root directory of the image')
 parser.add_argument('--sr_ratio', type=int, default=4,choices=[2,4],help = 'mutiple value of super resolution')
 parser.add_argument('--device', type=str, default='cuda',help = 'device to use for computation')
-parser.add_argument('--use_half', type=bool, default=False,help = 'use float16 for computation')
+parser.add_argument('--use_half', type=str2bool, default=False,help = 'use float16 for computation')
 args = parser.parse_args()
 
 save_path = ''.join(re.split('\.',args.image_path)[:-1]) + f'_x{args.sr_ratio}.png'
